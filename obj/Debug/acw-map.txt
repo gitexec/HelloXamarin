@@ -1,0 +1,4 @@
+HelloXamarin.MainActivity, HelloXamarin;md58c63373919dd353b23798fc893efb23b.MainActivity
+HelloXamarin.MainActivity, HelloXamarin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md58c63373919dd353b23798fc893efb23b.MainActivity
+HelloXamarin.MainActivity;md58c63373919dd353b23798fc893efb23b.MainActivity
+helloxamarin.MainActivity;md58c63373919dd353b23798fc893efb23b.MainActivity
