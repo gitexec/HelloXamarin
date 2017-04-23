@@ -3,12 +3,14 @@ using Android.App;
 using Android.Widget;
 using Android.Content;
 using Android.OS;
+using System.Collections.Generic;
 
 namespace HelloXamarin
 {
     [Activity(Label = "Phone Word", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
+        static readonly List<string> phoneNumbers = new List<string>();
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -20,12 +22,14 @@ namespace HelloXamarin
             EditText phoneNumberText = FindViewById<EditText>(Resource.Id.PhoneNumberText);
             Button translateButton = FindViewById<Button>(Resource.Id.TranslateButton);
             Button callButton = FindViewById<Button>(Resource.Id.CallButton);
+            Button callHistoryButton = FindViewById<Button>(Resource.Id.CallHistoryButton);
 
             callButton.Enabled = false;
 
             string translatedNumber = string.Empty;
             translateButton.Click += (object sender, EventArgs e) =>
             {
+                translatedNumber = Core.PhoneTranslator.ToNumber(phoneNumberText.ToString());
                 Console.WriteLine("Clicked!! " + translatedNumber);
 
                 if (String.IsNullOrWhiteSpace(translatedNumber))
@@ -45,6 +49,8 @@ namespace HelloXamarin
                 callDialog.SetMessage("Call" + translatedNumber + "?");
                 callDialog.SetNeutralButton("Call", delegate
                 {
+                    phoneNumbers.Add(translatedNumber);
+                    callHistoryButton.Enabled = true;
                     var callIntent = new Intent(Intent.ActionCall);
                     callIntent.SetData(Android.Net.Uri.Parse("tel:" + translatedNumber));
                     StartActivity(callIntent);
@@ -52,6 +58,12 @@ namespace HelloXamarin
                 callDialog.SetNegativeButton("Cancel", delegate {});
                 callDialog.Show();
 
+            };
+            callHistoryButton.Click += (sender, e) =>
+            {
+                var intent = new Intent(this, typeof(CallHistoryActivity));
+                intent.PutStringArrayListExtra("phone_numbers", phoneNumbers);
+                StartActivity(intent);
             };
         }
     }
